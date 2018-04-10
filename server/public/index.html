@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+    <link rel="stylesheet" href="./stylesheet/index.css">
+    <link rel="stylesheet" href="./libs/css/bootstrap.min.css">
+</head>
+<body>
+    <div id="qiniu_tm_success_alert" class="alert alert-success qiniu-tm-hidden" role="alert">
+        Upload Success!
+    </div>
+    <div id="qiniu_tm_fail_alert" class="alert alert-danger qiniu-tm-hidden" role="alert">
+        Upload Failed!
+    </div>
+    <header>
+        <p>票据打标系统 - 高研院版 V1.0.1</p>
+    </header>
+    <section class="container-fluid">
+        <div class="row">
+            <div id='qiniu_tm_leftpanel' class="col-8">
+                <div id="qiniu_tm_listcontainer">
+                    <div class="form-group row">
+                        <label for="" class="col-sm-3 col-form-label col-form-label-lg">新建票据类型:</label>
+                        <div class="col-sm-9">
+                            <button id="qiniu_tm_createnewclass" type="button" class="btn btn-primary" data-toggle="modal" data-target="#qiniu_tm_createnewclass_modal">新建</button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="qiniu_tm_createnewclass_modal" tabindex="-1" role="dialog" aria-labelledby="qiniu_tm_createnewclass" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">新建票据类型</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <label class="input-group-text" for="qiniu_tm_templatename">票据模版名称</label>
+                                                </div>
+                                                <input id="qiniu_tm_templatename" type="text" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                            <button id="qiniu_tm_createnewclass_submit" type="button" class="btn btn-primary">创建</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form action="/uploadimgs" method="POST" enctype="multipart/form-data">
+                        <div class="form-group row">
+                            <label for="colFormLabelLg" class="col-sm-3 col-form-label col-form-label-lg">选择当前票据类型:</label>
+                            <div class="col-sm-9">
+                                <div class="input-group mb-3">
+                                    <select class="custom-select" id="qiniu_tm_chooseclass" name="foldername"></select>
+                                    <div class="input-group-append">
+                                        <label class="input-group-text" for="qiniu_tm_chooseclass">Options</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br />
+                        <h5>
+                            训练数据集:
+                            <button id="qiniu_tm_class_delete" type="button" class="btn btn-danger">删除该分类</button>
+                            <button id="qiniu_tm_class_training" type="button" class="btn btn-success">开始训练</button>
+                        </h5>
+                        
+                        <div class="form-group row">
+                            <label for="qiniu_tm_uploadimg_selector" class="col-sm-3 col-form-label col-form-label-lg">上传标注、训练样本:</label>
+                            <div class="col-sm-9">
+                                <div class="input-group mb-3">
+                                    <div class="input-group mb-3">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id='qiniu_tm_imgselector' name="uploadimgs" multiple="multiple" />
+                                            <label id="qiniu_tm_uploadimg_label" class="custom-file-label" for="inputGroupFile02">Choose file</label>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <input class="btn btn-primary" type="submit" value="上传" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div id="qiniu_tm_listcontainer_list" class="list-group">
+                        <ul class="list-group"></ul>
+                    </div>
+                </div>
+                <div id='qiniu_tm_imgcontainer'>
+                    <p><b>当前分类：</b><span id="qiniu_tm_imgcontainer_title_classname">biubiu</span> &nbsp; &nbsp; &nbsp; &nbsp;<b>模版文件：</b><span id="qiniu_tm_imgcontainer_title_filename">xxx</span></p>
+                    <div>
+                        <!-- <canvas id='qiniu_tm_canvas'></canvas> -->
+                        <img id='qiniu_tm_img' src='' alt=''>
+                        <svg id='qiniu_tm_imgmarker' xmlns='http://www.w3.org/2000/svg' version='1.1'></svg>
+                    </div>
+                </div>
+            </div>
+        
+            <div id='qiniu_tm_rightpanel' class="col-4">
+                <div id="qiniu_tm_detailpanel">
+                    <div id="qiniu_tm_detailpanel_toolbox">
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-primary active">
+                                <input type="radio" name="options" autocomplete="off" checked disabled /> 标注
+                            </label>
+                            <label class="btn btn-primary">
+                                <input type="radio" name="options" autocomplete="off" disabled /> 设Key
+                            </label>
+                            <label class="btn btn-primary">
+                                <input type="radio" name="options" autocomplete="off" disabled /> 设Value
+                            </label>
+                        </div>
+                    </div>
+                    <div id="qiniu_tm_detailpanel_content">
+                        <div id="qiniu_tm_contentfiller" class="tab-pane fade show active" role="tabpanel" aria-labelledby="nav-profile-tab"></div>
+                    </div>
+    
+                    <div id="qiniu_tm_detailpanel_btngroup">
+                        <button id="qiniu_tm_detailpanel_btngroup_cancel" type="button" class="btn btn-secondary btn-sm" disabled>返回</button>
+                        <button id="qiniu_tm_detailpanel_btngroup_submit" type="button" class="btn btn-primary btn-sm" disabled>保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <p>@right reserved by Qiniu.com</p>
+    </footer>
+
+    <script src="./libs/js/jquery.min.js"></script>
+    <script src="./libs/js/bootstrap.min.js"></script>
+    <script src="./javascript/labeltool.js"></script>
+    <script src="./javascript/app.js" defer></script>
+</body>
+</html>
